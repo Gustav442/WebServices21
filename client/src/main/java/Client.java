@@ -3,33 +3,41 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Client {
 
+
+
     public static void main(String[] args) {
 
-        try {
-            Socket socket = new Socket("178.174.162.51", 5050);
 
-           var output = new PrintWriter(socket.getOutputStream());
-           output.println("Hello from client!\r\n\r\n");
-           output.flush();
+            try {
+                Socket socket = new Socket("localhost", 80);
 
-            var inputFromServer = new BufferedReader(new InputStreamReader((socket.getInputStream())));
+                var output = new PrintWriter(socket.getOutputStream());
 
-            while(true) {
-                var line = inputFromServer.readLine();
-                if (line == null || line.isEmpty()) {
-                    break;
+                output.println("Hello from client!\r\n\r\n");
+                output.flush();
+
+
+                var inputFromServer = new BufferedReader(new InputStreamReader((socket.getInputStream())));
+
+                while (true) {
+
+                    var line = inputFromServer.readLine();
+                    if (line == null || line.isEmpty()) {
+                        break;
+                    }
+                    System.out.print(line);
                 }
-                System.out.print(line);
-            }
-            inputFromServer.close();
-           output.close();
-           socket.close();
+                inputFromServer.close();
+                output.close();
+                socket.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
-}
